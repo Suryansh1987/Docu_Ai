@@ -5,19 +5,20 @@ import axios from 'axios';
 
 export default function TestConnection() {
   const [status, setStatus] = useState('Not tested');
-  
+
   const testConnection = async () => {
     setStatus('Testing...');
     try {
-      // Try to connect directly to the Flask backend
-      const response = await axios.get('http://localhost:5000/');
+      const response = await axios.post('http://localhost:5000/test_connection', {
+        query: 'Hello from frontend',
+      });
       setStatus(`Connected! Response: ${JSON.stringify(response.data)}`);
     } catch (error) {
       setStatus(`Error: ${error.message}`);
       console.error('Connection test error:', error);
     }
   };
-  
+
   return (
     <div className="p-4 border rounded-md mb-4">
       <h2 className="text-lg font-bold mb-2">Backend Connection Test</h2>
