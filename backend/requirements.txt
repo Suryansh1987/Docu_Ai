@@ -17,3 +17,4 @@ flask
 flask-cors
 faiss-cpu
 pymupdf
+gunicorn

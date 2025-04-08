@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Inbox, SendHorizontal } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
-import { askQuestion } from "@/lib/api";
+import { askQuestion } from "@/lib/api"; // Update this file if needed
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +23,7 @@ export default function DocumentQA() {
     });
 
     try {
-      const response = await fetch("http://localhost:5000/upload", {
+      const response = await fetch("https://docu-ai-1.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
@@ -32,7 +32,7 @@ export default function DocumentQA() {
 
       if (response.ok) {
         toast.success("Files uploaded successfully!");
-        setFiles([]); // Clear files after successful upload
+        setFiles([]);
       } else {
         toast.error(result.error || "File upload failed");
       }
@@ -64,10 +64,19 @@ export default function DocumentQA() {
     setQuestion("");
 
     try {
-      const response = await askQuestion(question);
+      const response = await fetch("https://docu-ai-1.onrender.com/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question }),
+      });
+
+      const data = await response.json();
+
       const botMessage = {
         role: "assistant",
-        content: response.answer || "No response from server.",
+        content: data.answer || "No response from server.",
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
